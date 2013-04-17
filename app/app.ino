@@ -1,5 +1,9 @@
 /* Define Constants */
-#define WEBDUINO_FAIL_MESSAGE ""
+#define WEBDUINO_AUTH_REALM             "OMRSign"
+#define WEBDUINO_FAIL_MESSAGE           ""
+#define WEBDUINO_AUTH_MESSAGE           ""
+#define WEBDUINO_SERVER_ERROR_MESSAGE   ""
+#define WEBDUINO_FAVICON_DATA           ""
 
 
 /* Include our external libraries */
@@ -27,6 +31,7 @@ void setup()
 
     // Register the command to run for a root GET request
     webserver.setDefaultCommand(&defaultCmd);
+    webserver.setFailureCommand(&failureCmd);
 
     // Start the server
     webserver.begin();
