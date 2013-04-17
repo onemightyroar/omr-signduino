@@ -11,6 +11,16 @@
 #include "Ethernet.h"
 #include "WebServer.h"
 
+
+/**
+ * Define our app credentials
+ *
+ * Should be base64 encoded in the HTTP Basic standard
+ * ( see http://en.wikipedia.org/wiki/Basic_access_authentication#Client_side )
+ */
+#define HTTP_BASIC_CREDENTIALS          "dGVzdDp0ZXN0"
+
+
 /* Include our OMRSign app code */
 #include "OMRSign.h"
 
@@ -18,6 +28,7 @@
 // Define our network addresses
 static uint8_t mac[] = { 0x90, 0xA2, 0xDA, 0x00, 0xCC, 0x4F }; // Mac
 static uint8_t ip[] = { 192, 168, 1, 150 }; // IP
+
 
 // Create our webserver
 WebServer webserver("", 80); // At root, port 80 (HTTP default)
@@ -32,6 +43,7 @@ void setup()
     // Register the command to run for a root GET request
     webserver.setDefaultCommand(&defaultCmd);
     webserver.setFailureCommand(&failureCmd);
+    /* webserver.setUrlPathCommand(&urlPathCommand); */
 
     // Start the server
     webserver.begin();
