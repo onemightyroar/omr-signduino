@@ -1,4 +1,4 @@
-# OMRSign
+# OMR-Signduino
 
 This is the code for a very basic web server API designed to run on an [Arduino][1] with an [ethernet shield][2] for controlling an LED powered sign.
 
