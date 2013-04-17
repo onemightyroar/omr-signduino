@@ -9,3 +9,17 @@ void httpNotFound(WebServer &server)
 
     server.printP(notFoundMsg);
 }
+
+/* Protect an endpoint by checking our API credentials */
+bool protectEndpoint(WebServer &server)
+{
+    // Check our credentials
+    if (server.checkCredentials(HTTP_BASIC_CREDENTIALS) != true) {
+        // 401 Unauthorized (ask for credentials)
+        server.httpUnauthorized();
+
+        return false;
+    }
+
+    return true;
+}
