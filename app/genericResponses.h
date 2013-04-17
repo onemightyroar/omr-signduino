@@ -1,17 +1,26 @@
 /* Default, root command to respond with */
 void defaultCmd(WebServer &server, WebServer::ConnectionType type, char *url_tail, bool tail_complete)
 {
-    // 200 "OK" response
-    server.httpSuccess();
+    // Check our credentials
+    if (protectEndpoint(server)) {
+        // 200 "OK" response
+        server.httpSuccess();
 
-    if (type == WebServer::GET) {
-        server.print("One Mighty Roar");
+        // Not a HEAD request
+        if (type != WebServer::HEAD) {
+            server.print("One Mighty Roar");
+        }
     }
 }
 
-/* Generic failure response */
+/* Unknown endpoint/bad match response */
 void failureCmd(WebServer &server, WebServer::ConnectionType type, char *url_tail, bool tail_complete)
 {
     // 404 "Not Found" response
     httpNotFound(server);
+}
+
+/* Generic response when other commands fail to match/execute */
+void urlPathCommand(WebServer &server, WebServer::ConnectionType type, char **url_path, char *url_tail, bool tail_complete)
+{
 }
