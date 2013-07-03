@@ -44,17 +44,17 @@ void setup()
     // Configure the Ethernet library with our network addresses
     Ethernet.begin(mac, ip);
 
-    // Register the command to run for a root GET request
-    webserver.setDefaultCommand(&defaultCmd);
-    webserver.setFailureCommand(&failureCmd);
-    /* webserver.setUrlPathCommand(&urlPathCommand); */
+    // Register the webserver's commands
+    setupServerCommands(webserver);
 
     // Start the server
     webserver.begin();
 
-	// Start the light strip and initialize it
-	lightStrip.begin();
-	initLightStrip(lightStrip);
+    // Start the light strip
+    lightStrip.begin();
+
+    // Initialize our light strip's controller
+    initLightStrip(lightStrip);
 }
 
 
