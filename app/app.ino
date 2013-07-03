@@ -10,6 +10,7 @@
 #include "SPI.h"
 #include "Ethernet.h"
 #include "WebServer.h"
+#include "Adafruit_NeoPixel.h"
 
 
 /**
@@ -27,11 +28,14 @@
 
 // Define our network addresses
 static uint8_t mac[] = { 0x90, 0xA2, 0xDA, 0x00, 0xCC, 0x4F }; // Mac
-static uint8_t ip[] = { 192, 168, 1, 150 }; // IP
+static uint8_t ip[] = { 10, 1, 10, 150 }; // IP
 
 
 // Create our webserver
 WebServer webserver("", 80); // At root, port 80 (HTTP default)
+
+// Create our LED light strip
+Adafruit_NeoPixel lightStrip = Adafruit_NeoPixel(180, 6, NEO_GRB + NEO_KHZ800);
 
 
 // Initializer
@@ -47,6 +51,10 @@ void setup()
 
     // Start the server
     webserver.begin();
+
+	// Start the light strip and initialize it
+	lightStrip.begin();
+	initLightStrip(lightStrip);
 }
 
 
