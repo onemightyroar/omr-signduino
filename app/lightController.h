@@ -27,3 +27,12 @@ void changeColorAll(uint8_t R, uint8_t G, uint8_t B) {
     // Show the things!
     strip.show();
 }
+
+// Get the color values as a string
+char *getColorString(uint8_t R, uint8_t G, uint8_t B) {
+    char colorString[100];
+
+    sprintf(colorString, "Red: %d\r\nGreen: %d\r\nBlue: %d", R, G, B);
+
+    return colorString;
+}
