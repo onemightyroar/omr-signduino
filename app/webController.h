@@ -16,10 +16,10 @@ void colorCommand(WebServer &server, WebServer::ConnectionType type, char *url_t
                 break;
             case WebServer::POST:
                 // Declare our param vars
-                char paramName[16], paramValue[16];
+                char paramName[32], paramValue[140];
 
                 // Loop through each param
-                while (server.readPOSTparam(paramName, 16, paramValue, 16)) {
+                while (server.readPOSTparam(paramName, 32, paramValue, 140)) {
                     // Red
                     if (strcasecmp(paramName, "r") == 0 || strcasecmp(paramName, "red") == 0) {
                         red = strtoul(paramValue, NULL, 10);
@@ -39,31 +39,27 @@ void colorCommand(WebServer &server, WebServer::ConnectionType type, char *url_t
                 // Change our color!
                 changeColorAll(red, green, blue);
 
-                server.print("OK");
-                server.printCRLF();
-
-                server.print("Red: ");
-                server.print(red);
-                server.printCRLF();
-
-                server.print("Green: ");
-                server.print(green);
-                server.printCRLF();
-
-                server.print("Blue: ");
-                server.print(blue);
-                server.printCRLF();
+                // Print the new color values
+                server.print(getColorString(red, green, blue));
 
                 break;
             case WebServer::DELETE:
-                changeColorAll(0, 0, 0);
-                server.print("RESET");
-                server.printCRLF();
-                server.print("OFF");
+                // Set the color values to black/off
+                red = 0;
+                green = 0;
+                blue = 0;
+
+                // Change our color!
+                changeColorAll(red, green, blue);
+
+                // Print the new color values
+                server.print(getColorString(red, green, blue));
+
                 break;
             default:
-                changeColorAll(255, 0, 255);
-                server.print("OMR Signduino");
+                // Print the color values
+                server.print(getColorString(red, green, blue));
+
                 break;
         }
     }
