@@ -8,7 +8,7 @@ void defaultCmd(WebServer &server, WebServer::ConnectionType type, char *url_tai
 
         // Not a HEAD request
         if (type != WebServer::HEAD) {
-            server.print("One Mighty Roar");
+            server.print("OMR Signduino");
         }
     }
 }
