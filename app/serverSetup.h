@@ -16,6 +16,8 @@ void setupServerCommands(WebServer &server) {
 
     // Add specific route commands
     server.addCommand("color", &colorCommand);
+    server.addCommand("b-color", &backgroundColorCommand);
+    server.addCommand("b-animate", &backgroundAnimateCommand);
     server.addCommand("m-color", &mColorCommand);
     server.addCommand("m-animate", &mAnimateCommand);
 }
