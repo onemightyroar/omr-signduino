@@ -146,14 +146,13 @@ void mAnimateCommand(WebServer &server, WebServer::ConnectionType type, char *ur
     // 200 "OK" response
     server.httpSuccess();
 
-    // Declare our color values
-    int red = 255;
-    int green = 255;
-    int blue = 255;
-    char *action = new char[140];
-    
-    // Set our default action
-    action = "line-fill";
+    // Create our animation args struct
+    lightControllerArgs animationArgs;
+    strcpy(animationArgs.action, "line-fill");
+    animationArgs.red = 255;
+    animationArgs.green = 255;
+    animationArgs.blue = 255;
+    animationArgs.delay = 0;
 
     switch (type) {
         case WebServer::HEAD:
@@ -167,42 +166,46 @@ void mAnimateCommand(WebServer &server, WebServer::ConnectionType type, char *ur
             while (server.readPOSTparam(paramName, 32, paramValue, 140)) {
                 // Red
                 if (strcasecmp(paramName, "r") == 0 || strcasecmp(paramName, "red") == 0) {
-                    red = strtoul(paramValue, NULL, 10);
+                    animationArgs.red = strtoul(paramValue, NULL, 10);
                 }
 
                 // Green
                 if (strcasecmp(paramName, "g") == 0 || strcasecmp(paramName, "green") == 0) {
-                    green = strtoul(paramValue, NULL, 10);
+                    animationArgs.green = strtoul(paramValue, NULL, 10);
                 }
 
                 // Blue
                 if (strcasecmp(paramName, "b") == 0 || strcasecmp(paramName, "blue") == 0) {
-                    blue = strtoul(paramValue, NULL, 10);
+                    animationArgs.blue = strtoul(paramValue, NULL, 10);
                 }
 
                 // Action
                 if (strcasecmp(paramName, "a") == 0 || strcasecmp(paramName, "action") == 0) {
-                    strcpy(action, paramValue);
+                    strcpy(animationArgs.action, paramValue);
+                }
+
+                // Delay
+                if (strcasecmp(paramName, "d") == 0 || strcasecmp(paramName, "delay") == 0
+                    || strcasecmp(paramName, "s") == 0 || strcasecmp(paramName, "speed") == 0) {
+
+                    animationArgs.delay = strtoul(paramValue, NULL, 10);
                 }
             }
-
-            // Create our animation args struct
-            lightControllerArgs animationArgs;
-            strcpy(animationArgs.action, action);
-            animationArgs.red = red;
-            animationArgs.green = green;
-            animationArgs.blue = blue;
 
             // Set our current animation and args
             setCurrentAnimation(&animateMPixels);
             setCurrentAnimationArgs(animationArgs);
 
             // Print the new color values
-            server.print(getColorString(red, green, blue));
+            server.print(getColorString(animationArgs.red, animationArgs.green, animationArgs.blue));
 
             // Create and print the new action value
             server.print("\nAction: ");
-            server.print(action);
+            server.print(animationArgs.action);
+
+            // Create and print the new action value
+            server.print("\nDelay: ");
+            server.print(animationArgs.delay);
 
             break;
         case WebServer::DELETE:
@@ -214,11 +217,15 @@ void mAnimateCommand(WebServer &server, WebServer::ConnectionType type, char *ur
             break;
         default:
             // Print the color values
-            server.print(getColorString(red, green, blue));
+            server.print(getColorString(animationArgs.red, animationArgs.green, animationArgs.blue));
 
-            // Create and print the new action value
+            // Create and print the action value
             server.print("\nAction: ");
-            server.print(action);
+            server.print(animationArgs.action);
+
+            // Create and print the action value
+            server.print("\nDelay: ");
+            server.print(animationArgs.delay);
 
             break;
     }
