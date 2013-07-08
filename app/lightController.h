@@ -147,7 +147,7 @@ void animateBackgroundPixels(char action[], uint8_t R, uint8_t G, uint8_t B, uin
                 strip.setPixelColor(b_pixels[i], blackColor);
             }
 
-            strip.setPixelColor(b_pixels[i] - 1, color);
+            strip.setPixelColor(b_pixels[i - 1], color);
         }
 
         strip.show();
@@ -155,7 +155,7 @@ void animateBackgroundPixels(char action[], uint8_t R, uint8_t G, uint8_t B, uin
 
         for (int16_t i = (b_pixels_length - 1); i >= 0; i -= 2) {
             strip.setPixelColor(b_pixels[i], blackColor);
-            strip.setPixelColor(b_pixels[i] - 1, color);
+            strip.setPixelColor(b_pixels[i - 1], color);
         }
 
         strip.show();
