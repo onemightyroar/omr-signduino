@@ -153,7 +153,7 @@ void mAnimateCommand(WebServer &server, WebServer::ConnectionType type, char *ur
     char *action = new char[140];
     
     // Set our default action
-    action = "strobe";
+    action = "line-fill";
 
     switch (type) {
         case WebServer::HEAD:
@@ -196,7 +196,6 @@ void mAnimateCommand(WebServer &server, WebServer::ConnectionType type, char *ur
             // Set our current animation and args
             setCurrentAnimation(&animateMPixels);
             setCurrentAnimationArgs(animationArgs);
-            // animateMPixels(action, red, green, blue);
 
             // Print the new color values
             server.print(getColorString(red, green, blue));
@@ -212,8 +211,8 @@ void mAnimateCommand(WebServer &server, WebServer::ConnectionType type, char *ur
             green = 0;
             blue = 0;
 
-            // Animate!
-            animateMPixels(action, red, green, blue);
+            // Kill the animation callback
+            setCurrentAnimation(NULL);
 
             // Print the new color values
             server.print(getColorString(red, green, blue));
