@@ -182,7 +182,7 @@ void mAnimateCommand(WebServer &server, WebServer::ConnectionType type, char *ur
 
                 // Action
                 if (strcasecmp(paramName, "a") == 0 || strcasecmp(paramName, "action") == 0) {
-                    action = paramValue;
+                    strcpy(action, paramValue);
                 }
             }
 
@@ -206,20 +206,10 @@ void mAnimateCommand(WebServer &server, WebServer::ConnectionType type, char *ur
 
             break;
         case WebServer::DELETE:
-            // Set the color values to black/off
-            red = 0;
-            green = 0;
-            blue = 0;
-
             // Kill the animation callback
             setCurrentAnimation(NULL);
 
-            // Print the new color values
-            server.print(getColorString(red, green, blue));
-
-            // Create and print the new action value
             server.print("\nAction: ");
-            server.print(action);
 
             break;
         default:
