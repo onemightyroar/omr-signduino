@@ -63,4 +63,8 @@ void loop()
 {
     // Process each incoming connection
     webserver.processConnection();
+
+    if (currentAnimation != NULL) {
+        currentAnimation(currentAnimationArgs);
+    }
 }
