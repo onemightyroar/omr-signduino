@@ -4,6 +4,7 @@ struct lightControllerArgs {
     uint8_t green;
     uint8_t blue;
     char action[140];
+    uint16_t delay;
 };
 
 // Define our callback type
@@ -84,9 +85,12 @@ void changeColorMPixels(uint8_t R, uint8_t G, uint8_t B) {
 }
 
 // Change the color of the strip's pixels in the M (of the OMR logo)
-void animateMPixels(char action[], uint8_t R, uint8_t G, uint8_t B) {
+void animateMPixels(char action[], uint8_t R, uint8_t G, uint8_t B, uint16_t delayTime = 0) {
     // Create our color from our RGB values
     uint32_t color = strip.Color(R, G, B);
+
+    // Create some reusable colors
+    uint32_t blackColor = strip.Color(0, 0, 0);
 
     // Get the length of the m_pixels array
     uint8_t m_pixels_length = sizeof(m_pixels)/sizeof(m_pixels[0]);
@@ -97,7 +101,10 @@ void animateMPixels(char action[], uint8_t R, uint8_t G, uint8_t B) {
 
     // Holy hell, I hate C. Make sure to ALWAYS append a "\0" character to your "strings" (character arrays)
     if (str_action.equals("line-fill\0")) {
-        uint8_t delayTime = 50;
+        // Set a sensible default
+        if (delayTime == 0) {
+            delayTime = 50;
+        }
 
         // Loop through each pixel in the "m"
         for (int8_t i = (m_pixels_length - 1); i >= 0; i--) {
@@ -105,19 +112,33 @@ void animateMPixels(char action[], uint8_t R, uint8_t G, uint8_t B) {
             strip.show();
             delay(delayTime);
         }
+        for (int8_t i = (m_pixels_length - 1); i >= 0; i--) {
+            strip.setPixelColor(i, blackColor);
+            strip.show();
+            delay(delayTime);
+        }
+
         for (int8_t i = 0; i < m_pixels_length; i++) {
-            strip.setPixelColor(i, 0, 0, 255);
+            strip.setPixelColor(i, color);
+            strip.show();
+            delay(delayTime);
+        }
+        for (int8_t i = 0; i < m_pixels_length; i++) {
+            strip.setPixelColor(i, blackColor);
             strip.show();
             delay(delayTime);
         }
 
     } else if (str_action.equals("snake\0")) {
-        uint8_t delayTime = 160;
+        // Set a sensible default
+        if (delayTime == 0) {
+            delayTime = 160;
+        }
 
         // Loop through each pixel in the "m"
         for (int8_t i = m_pixels_length; i >= 0; i -= 2) {
             if (i != (m_pixels_length - 1)) {
-                strip.setPixelColor(i, 0, 0, 0);
+                strip.setPixelColor(i, blackColor);
             }
 
             strip.setPixelColor(i - 1, color);
@@ -127,7 +148,7 @@ void animateMPixels(char action[], uint8_t R, uint8_t G, uint8_t B) {
         delay(delayTime);
 
         for (int8_t i = (m_pixels_length - 1); i >= 0; i -= 2) {
-            strip.setPixelColor(i, 0, 0, 0);
+            strip.setPixelColor(i, blackColor);
             strip.setPixelColor(i - 1, color);
         }
 
@@ -135,9 +156,13 @@ void animateMPixels(char action[], uint8_t R, uint8_t G, uint8_t B) {
         delay(delayTime);
 
     } else {
+        // Set a sensible default
+        if (delayTime == 0) {
+            delayTime = 160;
+        }
+
         // Setup our colors
         uint32_t redColor = strip.Color(255, 0, 0);
-        uint32_t blackColor = strip.Color(0, 0, 0);
 
         // Loop through each pixel in the "m"
         for (uint8_t j = 0; j < 2; j++) {
@@ -146,14 +171,14 @@ void animateMPixels(char action[], uint8_t R, uint8_t G, uint8_t B) {
             }
 
             strip.show();
-            delay(120);
+            delay(delayTime);
 
             for (int8_t i = (m_pixels_length - 1); i >= 0; i--) {
                 strip.setPixelColor(i, blackColor);
             }
 
             strip.show();
-            delay(120);
+            delay(delayTime);
         }
     }
 }
@@ -179,5 +204,5 @@ char *getColorString(uint8_t R, uint8_t G, uint8_t B) {
  */
 
 void animateMPixels(lightControllerArgs args) {
-    animateMPixels(args.action, args.red, args.green, args.blue);
+    animateMPixels(args.action, args.red, args.green, args.blue, args.delay);
 }
