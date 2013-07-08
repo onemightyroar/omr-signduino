@@ -3,7 +3,7 @@ struct lightControllerArgs {
     uint8_t red;
     uint8_t green;
     uint8_t blue;
-    char action[];
+    char action[140];
 };
 
 // Define our callback type
@@ -91,16 +91,70 @@ void animateMPixels(char action[], uint8_t R, uint8_t G, uint8_t B) {
     // Get the length of the m_pixels array
     uint8_t m_pixels_length = sizeof(m_pixels)/sizeof(m_pixels[0]);
 
-    // Loop through each pixel in the "m"
-    for (int8_t i = (m_pixels_length - 1); i >= 0; i--) {
-        strip.setPixelColor(i, color);
+    // Turn the action into a String object (lower cased)
+    String str_action = String(action);
+    str_action.toLowerCase();
+
+    // Holy hell, I hate C. Make sure to ALWAYS append a "\0" character to your "strings" (character arrays)
+    if (str_action.equals("line-fill\0")) {
+        uint8_t delayTime = 50;
+
+        // Loop through each pixel in the "m"
+        for (int8_t i = (m_pixels_length - 1); i >= 0; i--) {
+            strip.setPixelColor(i, color);
+            strip.show();
+            delay(delayTime);
+        }
+        for (int8_t i = 0; i < m_pixels_length; i++) {
+            strip.setPixelColor(i, 0, 0, 255);
+            strip.show();
+            delay(delayTime);
+        }
+
+    } else if (str_action.equals("snake\0")) {
+        uint8_t delayTime = 160;
+
+        // Loop through each pixel in the "m"
+        for (int8_t i = m_pixels_length; i >= 0; i -= 2) {
+            if (i != (m_pixels_length - 1)) {
+                strip.setPixelColor(i, 0, 0, 0);
+            }
+
+            strip.setPixelColor(i - 1, color);
+        }
+
         strip.show();
-        delay(40);
-    }
-    for (int8_t i = 0; i < m_pixels_length; i++) {
-        strip.setPixelColor(i, 0, 0, 255);
+        delay(delayTime);
+
+        for (int8_t i = (m_pixels_length - 1); i >= 0; i -= 2) {
+            strip.setPixelColor(i, 0, 0, 0);
+            strip.setPixelColor(i - 1, color);
+        }
+
         strip.show();
-        delay(40);
+        delay(delayTime);
+
+    } else {
+        // Setup our colors
+        uint32_t redColor = strip.Color(255, 0, 0);
+        uint32_t blackColor = strip.Color(0, 0, 0);
+
+        // Loop through each pixel in the "m"
+        for (uint8_t j = 0; j < 2; j++) {
+            for (int8_t i = (m_pixels_length - 1); i >= 0; i--) {
+                strip.setPixelColor(i, redColor);
+            }
+
+            strip.show();
+            delay(120);
+
+            for (int8_t i = (m_pixels_length - 1); i >= 0; i--) {
+                strip.setPixelColor(i, blackColor);
+            }
+
+            strip.show();
+            delay(120);
+        }
     }
 }
 
