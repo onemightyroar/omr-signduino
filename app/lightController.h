@@ -161,6 +161,68 @@ void animateBackgroundPixels(char action[], uint8_t R, uint8_t G, uint8_t B, uin
         strip.show();
         delay(delayTime);
 
+    } else if (str_action.equals("pulse\0")) {
+        // Set a sensible default
+        if (delayTime == 0) {
+            delayTime = 1;
+        }
+
+        uint8_t red = R;
+        uint8_t green = G;
+        uint8_t blue = B;
+
+        // Fade out
+        while (red > 0 || green > 0 || blue > 0) {
+            // Create our color from our RGB values
+            uint32_t color = strip.Color(red, green, blue);
+
+            // Loop through each pixel
+            for (uint8_t i = 0; i < b_pixels_length; i++) {
+                strip.setPixelColor(b_pixels[i], color);
+            }
+
+            strip.show();
+
+            // Decrement our values
+            if (red > 0) {
+                red--;
+            }
+            if (green > 0) {
+                green--;
+            }
+            if (blue > 0) {
+                blue--;
+            }
+
+            delay(delayTime);
+        }
+
+        // Fade in
+        while (red < R || green < G || blue < B) {
+            // Create our color from our RGB values
+            uint32_t color = strip.Color(red, green, blue);
+
+            // Loop through each pixel
+            for (uint8_t i = 0; i < b_pixels_length; i++) {
+                strip.setPixelColor(b_pixels[i], color);
+            }
+
+            strip.show();
+
+            // Decrement our values
+            if (red < R) {
+                red++;
+            }
+            if (green < G) {
+                green++;
+            }
+            if (blue < B) {
+                blue++;
+            }
+
+            delay(delayTime);
+        }
+
     } else {
         // Set a sensible default
         if (delayTime == 0) {
@@ -263,6 +325,68 @@ void animateMPixels(char action[], uint8_t R, uint8_t G, uint8_t B, uint16_t del
         strip.show();
         delay(delayTime);
 
+    } else if (str_action.equals("pulse\0")) {
+        // Set a sensible default
+        if (delayTime == 0) {
+            delayTime = 1;
+        }
+
+        uint8_t red = R;
+        uint8_t green = G;
+        uint8_t blue = B;
+
+        // Fade out
+        while (red > 0 || green > 0 || blue > 0) {
+            // Create our color from our RGB values
+            uint32_t color = strip.Color(red, green, blue);
+
+            // Loop through each pixel
+            for (uint8_t i = 0; i < m_pixels_length; i++) {
+                strip.setPixelColor(m_pixels[i], color);
+            }
+
+            strip.show();
+
+            // Decrement our values
+            if (red > 0) {
+                red--;
+            }
+            if (green > 0) {
+                green--;
+            }
+            if (blue > 0) {
+                blue--;
+            }
+
+            delay(delayTime);
+        }
+
+        // Fade in
+        while (red < R || green < G || blue < B) {
+            // Create our color from our RGB values
+            uint32_t color = strip.Color(red, green, blue);
+
+            // Loop through each pixel
+            for (uint8_t i = 0; i < m_pixels_length; i++) {
+                strip.setPixelColor(m_pixels[i], color);
+            }
+
+            strip.show();
+
+            // Decrement our values
+            if (red < R) {
+                red++;
+            }
+            if (green < G) {
+                green++;
+            }
+            if (blue < B) {
+                blue++;
+            }
+
+            delay(delayTime);
+        }
+
     } else {
         // Set a sensible default
         if (delayTime == 0) {
@@ -298,6 +422,13 @@ void changeColorAll(uint8_t R, uint8_t G, uint8_t B) {
     changeColorMPixels(R, G, B);
 }
 
+// Animate ALL of the strip's LEDs
+void animateAll(char action[], uint8_t R, uint8_t G, uint8_t B, uint16_t delayTime = 0) {
+    // Call our separate functions
+    animateBackgroundPixels(action, R, G, B, delayTime);
+    animateMPixels(action, R, G, B, delayTime);
+}
+
 // Get the color values as a string
 char *getColorString(uint8_t R, uint8_t G, uint8_t B) {
     char colorString[100];
@@ -324,4 +455,8 @@ void animateMPixels(lightControllerArgs args) {
 
 void animateBackgroundPixels(lightControllerArgs args) {
     animateBackgroundPixels(args.action, args.red, args.green, args.blue, args.delay);
+}
+
+void animateAll(lightControllerArgs args) {
+    animateAll(args.action, args.red, args.green, args.blue, args.delay);
 }
