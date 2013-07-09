@@ -83,7 +83,7 @@ void changeColorMPixels(uint8_t R, uint8_t G, uint8_t B) {
 
     // Loop through each pixel in the "m"
     for (uint8_t i = 0; i < m_pixels_length; i++) {
-        strip.setPixelColor(i, color);
+        strip.setPixelColor(m_pixels[i], color);
     }
 
     // Show the things!
@@ -213,23 +213,23 @@ void animateMPixels(char action[], uint8_t R, uint8_t G, uint8_t B, uint16_t del
 
         // Loop through each pixel in the "m"
         for (int8_t i = (m_pixels_length - 1); i >= 0; i--) {
-            strip.setPixelColor(i, color);
+            strip.setPixelColor(m_pixels[i], color);
             strip.show();
             delay(delayTime);
         }
         for (int8_t i = (m_pixels_length - 1); i >= 0; i--) {
-            strip.setPixelColor(i, blackColor);
+            strip.setPixelColor(m_pixels[i], blackColor);
             strip.show();
             delay(delayTime);
         }
 
         for (int8_t i = 0; i < m_pixels_length; i++) {
-            strip.setPixelColor(i, color);
+            strip.setPixelColor(m_pixels[i], color);
             strip.show();
             delay(delayTime);
         }
         for (int8_t i = 0; i < m_pixels_length; i++) {
-            strip.setPixelColor(i, blackColor);
+            strip.setPixelColor(m_pixels[i], blackColor);
             strip.show();
             delay(delayTime);
         }
@@ -242,19 +242,22 @@ void animateMPixels(char action[], uint8_t R, uint8_t G, uint8_t B, uint16_t del
 
         // Loop through each pixel in the "m"
         for (int8_t i = m_pixels_length; i >= 0; i -= 2) {
-            if (i != (m_pixels_length - 1)) {
-                strip.setPixelColor(i, blackColor);
+            if (i != m_pixels_length) {
+                strip.setPixelColor(m_pixels[i], blackColor);
             }
 
-            strip.setPixelColor(i - 1, color);
+            strip.setPixelColor(m_pixels[i - 1], color);
         }
 
         strip.show();
         delay(delayTime);
 
         for (int8_t i = (m_pixels_length - 1); i >= 0; i -= 2) {
-            strip.setPixelColor(i, blackColor);
-            strip.setPixelColor(i - 1, color);
+            strip.setPixelColor(m_pixels[i], blackColor);
+
+            if (i != 0) {
+                strip.setPixelColor(m_pixels[i - 1], color);
+            }
         }
 
         strip.show();
@@ -272,14 +275,14 @@ void animateMPixels(char action[], uint8_t R, uint8_t G, uint8_t B, uint16_t del
         // Loop through each pixel in the "m"
         for (uint8_t j = 0; j < 2; j++) {
             for (int8_t i = (m_pixels_length - 1); i >= 0; i--) {
-                strip.setPixelColor(i, redColor);
+                strip.setPixelColor(m_pixels[i], redColor);
             }
 
             strip.show();
             delay(delayTime);
 
             for (int8_t i = (m_pixels_length - 1); i >= 0; i--) {
-                strip.setPixelColor(i, blackColor);
+                strip.setPixelColor(m_pixels[i], blackColor);
             }
 
             strip.show();
